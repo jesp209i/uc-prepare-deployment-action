@@ -1,0 +1,23 @@
+name: 'Prepare Umbraco Cloud Deployment'
+description: 'Prepares a Deployment to Umbraco Cloud from your pipeline'
+inputs:
+  project-alias:
+    description: 'The project you are deploying to'
+    required: true
+  cloud-api-key:
+    description: 'Api Key that allows you to use the prototype api'
+    required: true
+  commit-message:
+    description: 'Message you want to use for commit in cloud - unused for now'
+    required: true
+    default: 'Custom Pipeline Cloud Deployment'
+outputs:
+  deployment-id:
+    description: "Deployment id for this run"
+    value: ${{ steps.deployment-meta.outputs.deployment-id }}
+runs:
+  using: "composite"
+  steps:
+    - id: deployment-meta
+        run: create_deployment.sh ${{ inputs.project-alias }} ${{ inputs.cloud-api-key }} ${{ inputs.commit-message }}
+        shell: bash
