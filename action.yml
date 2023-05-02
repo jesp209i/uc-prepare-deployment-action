@@ -19,5 +19,5 @@ runs:
   using: "composite"
   steps:
     - id: deployment-meta
-        run: create_deployment.sh ${{ inputs.project-alias }} ${{ inputs.cloud-api-key }} ${{ inputs.commit-message }}
-        shell: bash
+      run: create_deployment.sh ${{ inputs.project-alias }} ${{ inputs.cloud-api-key }} ${{ inputs.commit-message }}
+      shell: bash
