@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh -l
 
 # Set variables
 url="https://apim-dev-global.azure-api.net/global/project/cicd-prototype/api/public/projects/$1/deployments"
