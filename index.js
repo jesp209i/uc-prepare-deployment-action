@@ -24,7 +24,6 @@ async function run() {
         const responseBody = await res.readBody()
         const obj = JSON.parse(responseBody)
 
-        obj.deploymentId
         core.setOutput('DEPLOYMENT_ID', obj.deploymentId);
 
     } catch (error) {
