@@ -8,6 +8,9 @@ inputs:
   api-key:
     description: key needed to have access to api
     required: true
+  commit-message:
+    description: the message you want on your commit
+    required: true
 outputs:
   DEPLOYMENT_ID:
     description: The deployment id to be used by the rest of the process
