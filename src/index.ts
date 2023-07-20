@@ -1,4 +1,4 @@
-import { getInput, setOutput, setFailed } from '@actions/core';
+import { getInput, setOutput, setFailed, info } from '@actions/core';
 import {HttpClient, MediaTypes, Headers, HttpClientError} from '@actions/http-client';
 
 async function run() {
@@ -23,6 +23,10 @@ async function run() {
         const response = await client.post(url, JSON.stringify(requestBody), headers);
         const responseBody = await response.readBody()
         const obj = JSON.parse(responseBody)
+
+        info('Requested Deployment from Umbraco CLoud.');
+        info('----------------------------------------');
+        info(`Deployment Id: ${obj.deploymentId}`);
 
         setOutput('DEPLOYMENT_ID', obj.deploymentId);
 
