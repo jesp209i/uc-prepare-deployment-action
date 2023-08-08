@@ -1,41 +1,30 @@
 import { getInput, setOutput, setFailed, info } from '@actions/core';
-import {HttpClient, MediaTypes, Headers, HttpClientError} from '@actions/http-client';
+import { ApiClient } from '@jam-test-umbraco/umbraco-cloud-deployment-apiclient';
+import { DeploymentResponse } from '@jam-test-umbraco/umbraco-cloud-deployment-apiclient/src/apiTypes';
 
 async function run() {
     try {
-        const projectAlias = getInput('project-alias');
-        const apiKey = getInput('api-key');
-        const commitMessage = getInput('commit-message');
+        const apiBaseUrl = getInput('api-base-url', {required: true });
+        const projectAlias = getInput('project-alias', { required: true});
+        const apiKey = getInput('api-key', { required: true});
+        const commitMessage = getInput('commit-message', { required: true});
 
-        const url = `https://api-internal.umbraco.io/projects/${projectAlias}/deployments/`
+        const apiClient = new ApiClient(apiBaseUrl, projectAlias, apiKey);
 
-        const requestBody = {
-            "commitMessage": commitMessage
-        };
+        const response = await apiClient.prepareDeployment(commitMessage);
 
-        const headers = {
-            [Headers.ContentType]: MediaTypes.ApplicationJson,
-            "Umbraco-Api-Key": apiKey
-        };
+        const deploymentResponse = response as DeploymentResponse;
 
-        const client = new HttpClient();
-
-        const response = await client.post(url, JSON.stringify(requestBody), headers);
-        const responseBody = await response.readBody()
-        const obj = JSON.parse(responseBody)
-
-        info('Requested Deployment from Umbraco CLoud.');
+        info('Requested Deployment from Umbraco Cloud.');
         info('----------------------------------------');
-        info(`Deployment Id: ${obj.deploymentId}`);
+        info(`Deployment Id: ${deploymentResponse.deploymentId}`);
 
-        setOutput('DEPLOYMENT_ID', obj.deploymentId);
+        setOutput('DEPLOYMENT_ID', deploymentResponse.deploymentId);
 
     } catch (error: unknown) {
         console.log(error);
         setFailed("Got an error while trying to prepare a deployment")
     }
 }
-
-
 
 run();
